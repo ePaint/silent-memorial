@@ -3,7 +3,8 @@ from django.db import models
 
 
 class Post(models.Model):
-    post_id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4())
+    post_id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
+    print(post_id)
     author = models.ForeignKey('users.User', on_delete=models.CASCADE, verbose_name='Author', blank=True, default='')
     title = models.CharField(max_length=120, verbose_name='Title')
     content = models.TextField(verbose_name='Content')
