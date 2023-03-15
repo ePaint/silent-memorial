@@ -8,3 +8,4 @@ setuptools~=65.5.1
 sqlparse~=0.4.3
 tzdata~=2022.7
 wheel~=0.38.4
+python-dotenv~=1.0.0
