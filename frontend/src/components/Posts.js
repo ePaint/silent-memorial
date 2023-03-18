@@ -1,109 +1,84 @@
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import './Posts.css';
+import PostFeatured from './PostFeatured';
+import PostRegular from './PostRegular';
+import PostDetailed from './PostDetailed';
+import Pagination from './Pagination';
+
 function Posts() {
+    const [postData, setPostData] = useState({});
+    const [paginatorData, setPaginatorData] = useState({});
+
+    const fetchPost = (post_id) => {
+        const url = `http://localhost:8000/api/posts/${post_id}/`;
+        console.log('post_id:', post_id, ', url:', url);
+        axios.get(url).then(response => {
+            console.log(response);
+            setPostData({
+                ...postData,
+                post: response.data,
+                showPost: true
+            });
+        });
+    }
+
+    const fetchPostList = (page) => {
+        if (!page) page = 1;
+        const url = `http://localhost:8000/api/posts/?page=${page}`;
+        console.log('page:', page, ', url:', url);
+        axios.get(url).then(response => {
+            console.log(response);
+            setPostData({
+                ...postData,
+                postList: response.data.results,
+                showPost: false
+            });
+            setPaginatorData({
+                ...paginatorData,
+                current_page: response.data.current_page,
+                total_pages: response.data.total_pages,
+                page_prev: response.data.previous,
+                page_next: response.data.next
+            });
+        });
+    }
+
+    useEffect(() => fetchPostList(), []);
+    
+    const getPost = () => {
+        return <PostDetailed post={postData.post} fetchPost={fetchPost} />;
+    }
+
+    const getPostList = () => {
+        const content = [];
+        const regularPosts = [];
+        postData.postList?.forEach((post, index) => {
+            if (index) {
+                regularPosts.push(<PostRegular post={post} index={index+1} key={post.post_id} fetchPost={fetchPost} />);
+            } else {
+                content.push(<PostFeatured post={post} index={index+1} key={post.post_id} fetchPost={fetchPost} />);
+            }
+        });
+
+        content.push(<section className="posts">{regularPosts}</section>);
+
+        content.push(<Pagination data={paginatorData} fetchPostList={fetchPostList} />);
+
+        return content;
+    }
+
+    const getContent = () => {
+        if (postData.showPost) {
+            return getPost();
+        } else {
+            return getPostList();
+        }
+    }
+
     return (
         <div id="main">
-            <article className="post featured">
-            <header className="major">
-                <span className="date">April 25, 2017</span>
-                <h2><a href="#">And this is a<br />
-                massive headline</a></h2>
-                <p>Aenean ornare velit lacus varius enim ullamcorper proin aliquam<br />
-                facilisis ante sed etiam magna interdum congue. Lorem ipsum dolor<br />
-                amet nullam sed etiam veroeros.</p>
-            </header>
-            <a href="#" className="image main"><img src={require("../images/pic01.jpg")} alt="" /></a>
-            <ul className="actions special">
-                <li><a href="#" className="button large">Full Story</a></li>
-            </ul>
-            </article>
-
-            <section className="posts">
-            <article>
-                <header>
-                <span className="date">April 24, 2017</span>
-                <h2><a href="#">Sed magna<br />
-                ipsum faucibus</a></h2>
-                </header>
-                <a href="#" className="image fit"><img src={require("../images/pic02.jpg")} alt="" /></a>
-                <p>Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis magna etiam.</p>
-                <ul className="actions special">
-                <li><a href="#" className="button">Full Story</a></li>
-                </ul>
-            </article>
-            <article>
-                <header>
-                <span className="date">April 22, 2017</span>
-                <h2><a href="#">Primis eget<br />
-                imperdiet lorem</a></h2>
-                </header>
-                <a href="#" className="image fit"><img src={require("../images/pic03.jpg")} alt="" /></a>
-                <p>Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis magna etiam.</p>
-                <ul className="actions special">
-                <li><a href="#" className="button">Full Story</a></li>
-                </ul>
-            </article>
-            <article>
-                <header>
-                <span className="date">April 18, 2017</span>
-                <h2><a href="#">Ante mattis<br />
-                interdum dolor</a></h2>
-                </header>
-                <a href="#" className="image fit"><img src={require("../images/pic04.jpg")} alt="" /></a>
-                <p>Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis magna etiam.</p>
-                <ul className="actions special">
-                <li><a href="#" className="button">Full Story</a></li>
-                </ul>
-            </article>
-            <article>
-                <header>
-                <span className="date">April 14, 2017</span>
-                <h2><a href="#">Tempus sed<br />
-                nulla imperdiet</a></h2>
-                </header>
-                <a href="#" className="image fit"><img src={require("../images/pic05.jpg")} alt="" /></a>
-                <p>Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis magna etiam.</p>
-                <ul className="actions special">
-                <li><a href="#" className="button">Full Story</a></li>
-                </ul>
-            </article>
-            <article>
-                <header>
-                <span className="date">April 11, 2017</span>
-                <h2><a href="#">Odio magna<br />
-                sed consectetur</a></h2>
-                </header>
-                <a href="#" className="image fit"><img src={require("../images/pic06.jpg")} alt="" /></a>
-                <p>Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis magna etiam.</p>
-                <ul className="actions special">
-                <li><a href="#" className="button">Full Story</a></li>
-                </ul>
-            </article>
-            <article>
-                <header>
-                <span className="date">April 7, 2017</span>
-                <h2><a href="#">Augue lorem<br />
-                primis vestibulum</a></h2>
-                </header>
-                <a href="#" className="image fit"><img src={require("../images/pic07.jpg")} alt="" /></a>
-                <p>Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis magna etiam.</p>
-                <ul className="actions special">
-                <li><a href="#" className="button">Full Story</a></li>
-                </ul>
-            </article>
-            </section>
-
-            <footer>
-            <div className="pagination">
-                <a href="#" className="previous">Prev</a>
-                <a href="#" className="page active">1</a>
-                <a href="#" className="page">2</a>
-                <a href="#" className="page">3</a>
-                <span className="extra">&hellip;</span>
-                <a href="#" className="page">8</a>
-                <a href="#" className="page">9</a>
-                <a href="#" className="page">10</a>
-                <a href="#" className="next">Next</a>
-            </div>
-            </footer>
+            {getContent()}
         </div>
     )
 }

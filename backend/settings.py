@@ -83,23 +83,23 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': os.getenv('DJANGO_POSTGRESQL_NAME'),
-#         'USER': os.getenv('DJANGO_POSTGRESQL_USER'),
-#         'PASSWORD': os.getenv('DJANGO_POSTGRESQL_PASSWORD'),
-#         'HOST': os.getenv('DJANGO_POSTGRESQL_HOST'),
-#         'PORT': os.getenv('DJANGO_POSTGRESQL_PORT'),
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.getenv('DJANGO_POSTGRESQL_NAME'),
+        'USER': os.getenv('DJANGO_POSTGRESQL_USER'),
+        'PASSWORD': os.getenv('DJANGO_POSTGRESQL_PASSWORD'),
+        'HOST': os.getenv('DJANGO_POSTGRESQL_HOST'),
+        'PORT': os.getenv('DJANGO_POSTGRESQL_PORT'),
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 
 # Password validation
@@ -145,6 +145,10 @@ STATICFILES_DIRS = [
 # Whitelisting React port
 CORS_ORIGIN_WHITELIST = (
     os.getenv('DJANGO_CORS_ORIGIN_WHITELIST'),
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000'
 )
 
 # Default primary key field type
@@ -153,3 +157,8 @@ CORS_ORIGIN_WHITELIST = (
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.User'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 10,
+}
