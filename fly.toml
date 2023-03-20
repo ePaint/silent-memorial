@@ -10,7 +10,7 @@ processes = []
   builder = "paketobuildpacks/builder:base"
 
 [build.settings]
-  pythonbase = "3.9-slim-buster"
+  pythonbase = "3.8-slim-buster"
 
 [env]
   PORT = "8080"
