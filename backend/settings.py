@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
+import dj_database_url
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     'posts',
     'corsheaders',
     'rest_framework',
+    'whitenoise.runserver_nostatic',
 ]
 
 MIDDLEWARE = [
@@ -55,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -84,14 +87,17 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.getenv('DJANGO_POSTGRESQL_NAME'),
-        'USER': os.getenv('DJANGO_POSTGRESQL_USER'),
-        'PASSWORD': os.getenv('DJANGO_POSTGRESQL_PASSWORD'),
-        'HOST': os.getenv('DJANGO_POSTGRESQL_HOST'),
-        'PORT': os.getenv('DJANGO_POSTGRESQL_PORT'),
-    }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': os.getenv('DJANGO_POSTGRESQL_NAME'),
+    #     'USER': os.getenv('DJANGO_POSTGRESQL_USER'),
+    #     'PASSWORD': os.getenv('DJANGO_POSTGRESQL_PASSWORD'),
+    #     'HOST': os.getenv('DJANGO_POSTGRESQL_HOST'),
+    #     'PORT': os.getenv('DJANGO_POSTGRESQL_PORT'),
+    # }
+    'default': dj_database_url.config(
+        default='sqlite:///' + os.path.join('db.sqlite3')
+    )
 }
 
 # DATABASES = {
@@ -136,11 +142,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_URL = 'static/'
-
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'frontend/build/static'),
 ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
+MEDIA_URL = '/uploads/'
 
 # Whitelisting React port
 CORS_ORIGIN_WHITELIST = (
@@ -150,6 +160,10 @@ CORS_ORIGIN_WHITELIST = (
     'http://localhost:8000',
     'http://127.0.0.1:8000'
 )
+
+CORS_TRUSTED_ORIGINS = [
+    os.getenv('DJANGO_CORS_ORIGIN_WHITELIST'),
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
