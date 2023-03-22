@@ -33,12 +33,42 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
     'silent-memorial.fly.dev',
+    'silent-memorial-frontend.fly.dev',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://silent-memorial.fly.dev'
+    'https://silent-memorial.fly.dev',
+    'https://silent-memorial.fly.dev:3000',
+    'https://silent-memorial-frontend.fly.dev',
+    'https://silent-memorial-frontend.fly.dev:3000',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
 ]
 
+# Whitelisting React port
+CORS_ORIGIN_WHITELIST = [
+    'https://silent-memorial.fly.dev',
+    'https://silent-memorial.fly.dev:3000',
+    'https://silent-memorial-frontend.fly.dev',
+    'https://silent-memorial-frontend.fly.dev:3000',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+]
+
+CORS_TRUSTED_ORIGINS = [
+    'https://silent-memorial.fly.dev',
+    'https://silent-memorial.fly.dev:3000',
+    'https://silent-memorial-frontend.fly.dev',
+    'https://silent-memorial-frontend.fly.dev:3000',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+]
 
 # Application definition
 
@@ -108,6 +138,18 @@ DATABASES = {
     )
 }
 
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.getenv('DJANGO_POSTGRESQL_NAME'),
+            'USER': os.getenv('DJANGO_POSTGRESQL_USER'),
+            'PASSWORD': os.getenv('DJANGO_POSTGRESQL_PASSWORD'),
+            'HOST': os.getenv('DJANGO_POSTGRESQL_HOST'),
+            'PORT': os.getenv('DJANGO_POSTGRESQL_PORT'),
+        }
+    }
+
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
@@ -159,19 +201,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 MEDIA_URL = '/uploads/'
-
-# Whitelisting React port
-CORS_ORIGIN_WHITELIST = [
-    os.getenv('DJANGO_CORS_ORIGIN_WHITELIST'),
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
-    'http://localhost:8000',
-    'http://127.0.0.1:8000'
-]
-
-CORS_TRUSTED_ORIGINS = [
-    os.getenv('DJANGO_CORS_ORIGIN_WHITELIST'),
-]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
