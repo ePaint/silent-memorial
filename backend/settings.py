@@ -29,7 +29,15 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DJANGO_DEBUG') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+    'silent-memorial.fly.dev',
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://silent-memorial.fly.dev'
+]
 
 
 # Application definition
@@ -153,13 +161,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 MEDIA_URL = '/uploads/'
 
 # Whitelisting React port
-CORS_ORIGIN_WHITELIST = (
+CORS_ORIGIN_WHITELIST = [
     os.getenv('DJANGO_CORS_ORIGIN_WHITELIST'),
     'http://localhost:3000',
     'http://127.0.0.1:3000',
     'http://localhost:8000',
     'http://127.0.0.1:8000'
-)
+]
 
 CORS_TRUSTED_ORIGINS = [
     os.getenv('DJANGO_CORS_ORIGIN_WHITELIST'),

@@ -1,26 +1,19 @@
-# fly.toml file generated for silent-memorial-backend on 2023-03-20T04:35:56Z
+# fly.toml file generated for silent-memorial on 2023-03-21T21:23:29-03:00
 
-app = "silent-memorial-backend"
+app = "silent-memorial"
 kill_signal = "SIGINT"
 kill_timeout = 5
-primary_region = "scl"
+primary_region = "lax"
 processes = []
 
-[build]
-  builder = "paketobuildpacks/builder:base"
-
-[build.settings]
-  pythonbase = "3.8-slim-buster"
-
 [env]
-  PORT = "8080"
 
 [experimental]
   auto_rollback = true
 
 [[services]]
   http_checks = []
-  internal_port = 8080
+  internal_port = 8000
   processes = ["app"]
   protocol = "tcp"
   script_checks = []
