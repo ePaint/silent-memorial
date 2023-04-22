@@ -23,8 +23,8 @@ class PostPagination(PageNumberPagination):
             ('items_in_page', self.page_size),
             ('current_page', self.page.number),
             ('total_pages', self.page.paginator.num_pages),
-            ('next', self.get_next_link()),
-            ('previous', self.get_previous_link()),
+            ('page_next', self.page.next_page_number() if self.page.has_next() else None),
+            ('page_prev', self.page.previous_page_number() if self.page.has_previous() else None),
             ('results', data)
         ]))
 

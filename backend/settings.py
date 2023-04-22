@@ -30,6 +30,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 DEBUG = os.getenv('DJANGO_DEBUG') == 'True'
 
 ALLOWED_HOSTS = [
+    'mysoullegacies.com',
     '127.0.0.1',
     'localhost',
     'silent-memorial.fly.dev',
@@ -37,6 +38,7 @@ ALLOWED_HOSTS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
+    'https://mysoullegacies.com',
     'https://silent-memorial.fly.dev',
     'https://silent-memorial.fly.dev:3000',
     'https://silent-memorial-frontend.fly.dev',
@@ -49,6 +51,7 @@ CSRF_TRUSTED_ORIGINS = [
 
 # Whitelisting React port
 CORS_ORIGIN_WHITELIST = [
+    'https://mysoullegacies.com',
     'https://silent-memorial.fly.dev',
     'https://silent-memorial.fly.dev:3000',
     'https://silent-memorial-frontend.fly.dev',
@@ -60,6 +63,7 @@ CORS_ORIGIN_WHITELIST = [
 ]
 
 CORS_TRUSTED_ORIGINS = [
+    'https://mysoullegacies.com',
     'https://silent-memorial.fly.dev',
     'https://silent-memorial.fly.dev:3000',
     'https://silent-memorial-frontend.fly.dev',
