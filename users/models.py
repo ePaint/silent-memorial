@@ -26,7 +26,7 @@ class CustomUserManager(UserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    user_id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
+    user_id = models.UUIDField(primary_key=True, db_index=True, unique=True, editable=False, default=uuid.uuid4)
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=255, blank=True, default='')
     last_name = models.CharField(max_length=255, blank=True, default='')
@@ -35,15 +35,18 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
 
-    create_date = models.DateField(auto_now_add=True)
-    modified_date = models.DateField(auto_now=True)
-    last_login_date = models.DateField(blank=True, null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    modified_date = models.DateTimeField(auto_now=True)
+    last_login_date = models.DateTimeField(blank=True, null=True)
 
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
     EMAIL_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = [
+        'first_name',
+        'last_name',
+    ]
 
     class Meta:
         verbose_name = 'User'
