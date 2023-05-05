@@ -91,6 +91,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'whitenoise.runserver_nostatic',
     'djoser',
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 MIDDLEWARE = [
@@ -250,7 +251,7 @@ SIMPLE_JWT = {
     'UPDATE_LAST_LOGIN': True,
 }
 
-DOMAIN = 'localhost:3000'
+DOMAIN = os.getenv('DJANGO_DOMAIN')
 SITE_NAME = 'My Soul Legacy'
 DJOSER = {
     'USER_ID_FIELD': 'user_id',
