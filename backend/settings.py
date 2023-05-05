@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
+from datetime import timedelta
+
 import dj_database_url
 from pathlib import Path
 from dotenv import load_dotenv
@@ -200,7 +202,7 @@ USE_TZ = True
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'frontend/build/static'),
+    os.path.join(BASE_DIR, 'frontend\\build\\static'),
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
@@ -221,6 +223,14 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '50/minute',
+        'user': '100/minute',
+    },
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 10,
 }
@@ -235,8 +245,13 @@ EMAIL_USE_TLS = True
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('JWT',),
     'USER_ID_FIELD': 'user_id',
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=365),
+    'UPDATE_LAST_LOGIN': True,
 }
 
+DOMAIN = 'localhost:3000'
+SITE_NAME = 'My Soul Legacy'
 DJOSER = {
     'USER_ID_FIELD': 'user_id',
     'LOGIN_FIELD': 'email',
